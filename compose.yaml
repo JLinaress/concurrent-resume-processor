@@ -1,0 +1,25 @@
+﻿services:
+  concurrentresumeprocessor.api:
+    image: concurrentresumeprocessor.api
+    build:
+      context: .
+      dockerfile: ConcurrentResumeProcessor.Api/Dockerfile
+
+  concurrentresumeprocessor.processorlib:
+    image: concurrentresumeprocessor.processorlib
+    build:
+      context: .
+      dockerfile: ConcurrentResumeProcessor.ProcessorLib/Dockerfile
+
+  concurrentresumeprocessor.webui:
+    image: concurrentresumeprocessor.webui
+    build:
+      context: .
+      dockerfile: ConcurrentResumeProcessor.WebUI/Dockerfile
+
+  concurrentresumeprocessor.tests:
+    image: concurrentresumeprocessor.tests
+    build:
+      context: .
+      dockerfile: ConcurrentResumeProcessor.Tests/Dockerfile
+
