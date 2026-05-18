@@ -1,6 +1,6 @@
 ﻿using ProcessorLib.Services;
 
-namespace ProcessorTests;
+namespace ProcessorTests.TestData;
 
 public class DocumentParserTests
 {
