@@ -1,9 +1,16 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using ProcessorLib.Contracts;
+using ProcessorLib.Services;
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Environment.EnvironmentName = "Development";
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();  
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<IBatchProcessorService, BatchProcessorService>();
+builder.Services.AddSingleton<KeywordExtractor>();
+builder.Services.AddSingleton<MatchScorer>();
 
 var app = builder.Build();
 
