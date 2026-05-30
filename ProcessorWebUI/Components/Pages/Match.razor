@@ -1,0 +1,115 @@
+@page "/match"
+@rendermode InteractiveServer
+@using ProcessorLib.Models
+@using ProcessorWebUI.Contracts
+@inject IBatchMatchService MatchService
+
+<PageTitle>Resume Match</PageTitle>
+
+<h1>Resume-Job Matcher</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Resume Text</h3>
+        @* Updated to bind instantly on paste/input *@
+        <textarea @bind-value="resumeText" @bind-value:event="oninput" rows="15" class="form-control" placeholder="Paste your resume here..."></textarea>
+    </div>
+    
+    <div class="col-md-6">
+        <h3>Job Description(s)</h3>
+        @* Updated to bind instantly on paste/input *@
+        <textarea @bind-value="jdTextsStr" @bind-value:event="oninput" rows="15" class="form-control" placeholder="Enter each JD on a new line..."></textarea>
+    </div>
+</div>
+
+<div class="mt-3">
+    <button @onclick="RunMatch" disabled="@isProcessing" class="btn btn-primary">
+        @(isProcessing ? "Matching..." : "Run Match")
+    </button>
+</div>
+
+@if (errorMessage != null)
+{
+    <div class="alert alert-danger mt-3">@errorMessage</div>
+}
+
+@if (results != null)
+{
+    @if (results.Any())
+    {
+        <div class="mt-4">
+            <h2>Results (@results.Count match(es))</h2>
+            
+            @foreach (var result in results)
+            {
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Match Score: @result.Score% - @result.Recommendation</h5>
+                        
+                        <h6>JD Keywords:</h6>
+                        <div class="d-flex flex-wrap gap-1 mb-2">
+                            @foreach (var skill in result.JdKeywords.Take(5))
+                            {
+                                <span class="badge bg-success">@skill</span>
+                            }
+                        </div>
+                        
+                        <h6>Missing Skills:</h6>
+                        <div class="d-flex flex-wrap gap-1">
+                            @foreach (var skill in result.MissingSkills)
+                            {
+                                <span class="badge bg-warning text-dark">@skill</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info mt-3">No matching results were generated for the provided text.</div>
+    }
+}
+
+@code {
+    private string resumeText = "";
+    private string jdTextsStr = "";
+    private bool isProcessing = false;
+    private string? errorMessage;
+    private List<MatchResult>? results;
+    
+    private async Task RunMatch()
+    {
+        if (string.IsNullOrWhiteSpace(resumeText) || string.IsNullOrWhiteSpace(jdTextsStr))
+        {
+            errorMessage = "Please provide both a resume and at least one job description.";
+            return;
+        }
+
+        isProcessing = true;
+        errorMessage = null;
+        results = null;
+        
+        try
+        {
+            var jdTexts = jdTextsStr.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+            
+            var request = new BatchRequest
+            {
+                ResumeContent = resumeText.Trim(),
+                JdContents = jdTexts
+            };
+            
+            results = await MatchService.MatchBatchAsync(request);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isProcessing = false;
+        }
+    }
+}

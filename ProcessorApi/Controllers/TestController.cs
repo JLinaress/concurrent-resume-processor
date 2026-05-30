@@ -1,16 +1,21 @@
 // diagnostic endpoint class that exposes DocumentParser service through REST API calls to verify PDF/Word 
 // parsing works before building the full batch processor.
 using Microsoft.AspNetCore.Mvc;
+using ProcessorApi.DTOs;
 using ProcessorLib.Services;
 
+//TODO remove this class and the TestDTO when you publish as it isn't needed and it is a vulnerability 
 namespace ProcessorApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class TestController : ControllerBase
 {
-    [HttpGet]  // ← ADD: Base test
-    public IActionResult Get() => Ok(new { message = "alive!", time = DateTime.UtcNow });
+    [HttpGet]
+    public IActionResult Get() => Ok(new { message = "We're Alive!", time = DateTime.UtcNow });
+    
+    [HttpPost] // ← ADD: Base test. This method is designed to accept enclosed payload 
+    public IActionResult Post([FromBody] TestRequestDto request) => Ok(new { message = request.Message, time = request.Time });
     
     [HttpGet("parse-pdf/{filePath}")]
     public IActionResult ParsePdf(string filePath)

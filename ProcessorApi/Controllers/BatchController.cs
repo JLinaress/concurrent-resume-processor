@@ -16,6 +16,6 @@ public class BatchController : ControllerBase
     }
     
     [HttpPost("match")]
-    public async Task<IActionResult> MatchBatch([FromBody] BatchRequest request) =>
+    public async Task<ActionResult<List<MatchResult>>> MatchBatch([FromBody] BatchRequest request) =>
         Ok(await _processor.ProcessBatchAsync(request.ResumeContent, request.JdContents, CancellationToken.None));
 }

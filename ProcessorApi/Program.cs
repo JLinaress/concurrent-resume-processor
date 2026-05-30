@@ -3,6 +3,13 @@ using ProcessorLib.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowBlazorWebUI", policy => 
+        policy.WithOrigins("http://localhost:5002")  // ✅ Fixed typo: "http"
+            .AllowAnyMethod()
+            .AllowAnyHeader());  // ✅ Good to add this
+});
+
 builder.Environment.EnvironmentName = "Development";
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
@@ -19,12 +26,13 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+// ✅ Now this matches the policy name above
+app.UseCors("AllowBlazorWebUI");  
+
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ConcurrentResumeProcessor v1"));
-// app.UseHttpsRedirection();
 app.MapControllers();
 
-// TODO: DEBUG - Remove later
 app.MapGet("/debug", () => new { message = "alive!", path = Directory.GetCurrentDirectory() });
 app.MapGet("/parse/{filePath}", (string filePath) =>
 {
