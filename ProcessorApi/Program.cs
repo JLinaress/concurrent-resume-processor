@@ -5,9 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options => {
     options.AddPolicy("AllowBlazorWebUI", policy => 
-        policy.WithOrigins("http://localhost:5002")  // ✅ Fixed typo: "http"
+        policy.WithOrigins("http://localhost:5002")
             .AllowAnyMethod()
-            .AllowAnyHeader());  // ✅ Good to add this
+            .AllowAnyHeader());
 });
 
 builder.Environment.EnvironmentName = "Development";
@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IBatchProcessorService, BatchProcessorService>();
 builder.Services.AddSingleton<KeywordExtractor>();
-builder.Services.AddSingleton<MatchScorer>();
+builder.Services.AddSingleton<IMatchScorer, MatchScorer>();
 
 var app = builder.Build();
 
@@ -26,7 +26,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-// ✅ Now this matches the policy name above
 app.UseCors("AllowBlazorWebUI");  
 
 app.UseSwagger();

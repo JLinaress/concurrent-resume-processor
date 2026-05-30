@@ -8,8 +8,8 @@ namespace ProcessorLib.Services;
 public class BatchProcessorService : IBatchProcessorService
 {
     private readonly KeywordExtractor _extractor;
-    private readonly MatchScorer _scorer;
-    public BatchProcessorService(KeywordExtractor extractor, MatchScorer scorer)
+    private readonly IMatchScorer _scorer;
+    public BatchProcessorService(KeywordExtractor extractor, IMatchScorer scorer)
     {
         _extractor = extractor;
         _scorer = scorer;

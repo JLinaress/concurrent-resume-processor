@@ -30,5 +30,6 @@
     &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.DocumentParserTests.ParsePdf_ReturnsTexts&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.DocumentParserTests.DocumentParser_ParseText_ReturnsTexts&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.DocumentParserTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.MatchScorerTests&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
