@@ -7,9 +7,9 @@ namespace ProcessorLib.Services;
 
 public class BatchProcessorService : IBatchProcessorService
 {
-    private readonly KeywordExtractor _extractor;
+    private readonly IKeywordExtractor _extractor;
     private readonly IMatchScorer _scorer;
-    public BatchProcessorService(KeywordExtractor extractor, IMatchScorer scorer)
+    public BatchProcessorService(IKeywordExtractor extractor, IMatchScorer scorer)
     {
         _extractor = extractor;
         _scorer = scorer;
@@ -52,7 +52,7 @@ public class BatchProcessorService : IBatchProcessorService
      
     private static string GenerateTailoredResume(
         string resume, 
-        HashSet<string> strongMatches,
+        IEnumerable<string> strongMatches,
         List<string> missing)
     {
         var sb = new StringBuilder(); //($"# Optimized Resume (ACTUAL: {resume.Length} chars)\n\n");

@@ -16,7 +16,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<IBatchProcessorService, BatchProcessorService>();
-builder.Services.AddSingleton<KeywordExtractor>();
+builder.Services.AddSingleton<IKeywordExtractor, KeywordExtractor>();
 builder.Services.AddSingleton<IMatchScorer, MatchScorer>();
 
 var app = builder.Build();
