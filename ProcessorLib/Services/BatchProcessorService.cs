@@ -32,7 +32,7 @@ public class BatchProcessorService : IBatchProcessorService
                  var score = _scorer.CalculateMatchScore(resumeKeywords, jdKeywords);
                  var missing = _scorer.FindMissingSkills(resumeKeywords, jdKeywords);
                  var strongMatches = _scorer.FindStrongMatches(resumeKeywords, jdKeywords);
-                 var tailored = GenerateTailoredResume(resumeText, jdKeywords, missing);
+                 var tailored = GenerateTailoredResume(resumeText, strongMatches, missing);
                  
                  results.Add(new MatchResult
                  {

@@ -18,7 +18,7 @@ public class KeywordExtractorTests
     [InlineData("ci/cd,tcp/ip", "tcp/ip")]  // Glued via comma
     [InlineData("   ", "")]                 // Only whitespace
     [InlineData(null, "")]                  // Null handling
-    public void ExtractKeywords_EdgeCases_ReturnsHandledExpectedly(string input, string expected)
+    public void ExtractKeywords_EdgeCases_ReturnsHandledExpectedly(string? input, string expected)
     {
         // Arrange
         var extractor = new KeywordExtractor();
@@ -32,7 +32,6 @@ public class KeywordExtractorTests
         else
             result.Should().Contain(expected);
     }
-    
     
     [Fact]
     public void ExtractKeywords_StopWordsAndDuplicates_FiltersThemOut()

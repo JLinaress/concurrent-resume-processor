@@ -12,8 +12,13 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AString_002EComparison_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003Ff71b67a2195f9edac51c3c82e40fccd25f957ac185e7c8a684189f8b5c1e387_003FString_002EComparison_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003ATestInvoker_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003F5e14a4e27990972fa4ae94975603bd298aaf328ee083c03b10569ee4724d57_003FTestInvoker_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=7020124F_002D9FFC_002D4AC3_002D8F3D_002DAAB8E0240759_002Ff_003AWhere_002Ecs_002Fl_003A_002E_002E_003F_002E_002E_003F_002E_002E_003FLibrary_003FApplication_0020Support_003FJetBrains_003FRider2026_002E1_003Fresharper_002Dhost_003FSourcesCache_003Fba5d4c39e065a5d0b292bfaad4299d596139aa92f62bd9f657519afd39f5b4_003FWhere_002Ecs/@EntryIndexedValue">ForceIncluded</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2b8fa887_002Ddb61_002D4a30_002Db605_002D7f70f30cdcfd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="BatchProcessorService_MultipleJdList_ReturnsAllOrdersByScoreDescending" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.BatchProcessorServiceTests&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
 	
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=60c1a5c0_002D4390_002D4792_002D8254_002Dbad817f1718c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ParsePdf_ReturnsTexts" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=60c1a5c0_002D4390_002D4792_002D8254_002Dbad817f1718c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ParsePdf_ReturnsTexts" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.KeywordExtractorTests&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.MatchScorerTests.CalculateMatchScore_PerfectMatch_Returns100&lt;/TestId&gt;
@@ -31,5 +36,7 @@
     &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.DocumentParserTests.DocumentParser_ParseText_ReturnsTexts&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.DocumentParserTests&lt;/TestId&gt;
     &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.MatchScorerTests&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.BatchProcessorServiceTests.BatchProcessorService_EmptyJdList_ReturnsEmptyResult&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::B85190B5-BE07-4236-BDBE-B6769465C019::net9.0::ProcessorTests.ProcessorLibTests.BatchProcessorServiceTests.BatchProcessorService_MultipleJdList_ReturnsAllOrdersByScoreDescending&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
