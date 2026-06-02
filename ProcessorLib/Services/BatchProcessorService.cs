@@ -15,9 +15,8 @@ public class BatchProcessorService : IBatchProcessorService
         _scorer = scorer;
     }
     
-    public async Task<List<MatchResult>> ProcessBatchAsync(
-        string resumeText, 
-        List<string> jdTexts, 
+    public async Task<List<MatchResult>> ProcessBatchAsync(string resumeText,
+        IEnumerable<string> jdTexts,
         CancellationToken token)
      {
          var resumeKeywords = _extractor.ExtractKeywords(resumeText);

@@ -18,7 +18,7 @@ public class KeywordExtractor : IKeywordExtractor
         
         var paddedText = Regex.Replace(text, @"(?<i>\bdotnet\b|\b\.net\b|\bcsharp\b|\bc\#\b)", " ${i} ", RegexOptions.IgnoreCase);
         
-        var clean = Regex.Replace(paddedText, @"[^\w\s\-\|\#\/\.]", " ").ToLower();
+        var clean = CleanText(paddedText);
         
         return clean
             .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
@@ -48,4 +48,7 @@ public class KeywordExtractor : IKeywordExtractor
             ? token[..^1]
             : token;
     }
+    
+    private static string CleanText(string text) => 
+        Regex.Replace(text ?? "", @"[^\w\s\-\|\#\/\.]", " ").ToLower();
 }

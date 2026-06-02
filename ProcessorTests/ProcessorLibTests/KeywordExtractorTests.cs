@@ -62,7 +62,7 @@ public class KeywordExtractorTests
         var extractor = new KeywordExtractor();
     
         // Act & Assert 
-        var result = extractor.ExtractKeywords("I program in C#.");
+        var result = extractor.ExtractKeywords("I program in C#.").ToList();
         result.Should().Contain("c#"); 
         result.Should().NotContain("c#."); // Bug check: makes sure trailing punctuation isn't glued
     }
@@ -73,7 +73,7 @@ public class KeywordExtractorTests
         var extractor = new KeywordExtractor();
     
         // Act
-        var result = extractor.ExtractKeywords("Using with.net framework");
+        var result = extractor.ExtractKeywords("Using with.net framework").ToList();
     
         // Assert
         result.Should().Contain(".net");
