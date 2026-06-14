@@ -4,13 +4,9 @@ namespace ProcessorLib.Models;
 
 public class ComparePayloadDto
 {
-    [Required]
-    [MaxLength(100000, ErrorMessage = "Text cannot exceed 100,000 characters.")]
-
-    public string ResumeContent { get; set; } = String.Empty;
+    [StringLength(int.MaxValue)]
+    public string ResumeContent { get; set; } = "";
     
-    [Required]
-    [MaxLength(100000)]
-
+    [StringLength(int.MaxValue)]
     public string JdContent { get; set; } = "";
 }

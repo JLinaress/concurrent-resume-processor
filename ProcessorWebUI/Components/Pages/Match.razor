@@ -90,17 +90,47 @@
         isProcessing = true;
         errorMessage = null;
         results = null;
-        
+    
         try
         {
-            var jdTexts = jdTextsStr.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList();
+            // 1. Normalize all variations of line endings
+            var normalizedResume = resumeText
+                .Replace("\r\n", "\n")
+                .Replace("\r", "\n");
+
+            // 2. Split into individual lines to completely filter out empty/blank lines
+            var resumeLines = normalizedResume.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            // 3. Rebuild the resume, removing hidden control characters that break JSON parsing
+            var cleanLines = resumeLines
+                .Select(line => System.Text.RegularExpressions.Regex.Replace(line, @"[\x00-\x1F\x7F]", "")) // Strips hidden ASCII control chars
+                .Where(line => !string.IsNullOrWhiteSpace(line));
+
+            // 4. Join back into a clean, single-spaced block of text
+            var cleanResume = string.Join("\n", cleanLines).Trim();
+            
+            // 1. Normalize all variations of line endings
+            var normalizedJd = jdTextsStr
+                .Replace("\r\n", "\n")
+                .Replace("\r", "\n");
+
+            // 2. Split into individual lines to completely filter out empty/blank lines
+            var jdLines = normalizedJd.Split('\n', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            // 3. Rebuild the jd, removing hidden control characters that break JSON parsing
+            var cleanJdLines = jdLines
+                .Select(line => System.Text.RegularExpressions.Regex.Replace(line, @"[\x00-\x1F\x7F]", "")) // Strips hidden ASCII control chars
+                .Where(line => !string.IsNullOrWhiteSpace(line));
+
+            // 4. Join back into a clean, single-spaced block of text
+            var cleanJd = string.Join("\n", cleanJdLines).Trim();
             
             var request = new BatchRequest
             {
-                ResumeContent = resumeText.Trim(),
-                JdContents = jdTexts
+                ResumeContent = cleanResume,
+                JdContents = new List<string>() { cleanJd }
             };
-            
+        
             results = await MatchService.MatchBatchAsync(request);
         }
         catch (Exception ex)

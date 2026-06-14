@@ -4,11 +4,8 @@ namespace ProcessorLib.Models;
 
 public class BatchRequest
 {
-    [Required]
-    [MaxLength(100)]
+    [StringLength(int.MaxValue)]
     public string ResumeContent { get; set; } = "";
     
-    [Required]
-    [MaxLength(100)]
     public List<string> JdContents { get; set; } = new();
 }
