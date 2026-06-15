@@ -1,25 +1,23 @@
 ﻿services:
-  concurrentresumeprocessor.api:
-    image: concurrentresumeprocessor.api
+  processorapi:
+    image: processorapi
     build:
       context: .
-      dockerfile: ConcurrentResumeProcessor.Api/Dockerfile
+      dockerfile: ProcessorApi/Dockerfile
+    ports:
+      - "5003:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
 
-  concurrentresumeprocessor.processorlib:
-    image: concurrentresumeprocessor.processorlib
+  processorwebui:
+    image: processorwebui
     build:
       context: .
-      dockerfile: ConcurrentResumeProcessor.ProcessorLib/Dockerfile
-
-  concurrentresumeprocessor.webui:
-    image: concurrentresumeprocessor.webui
-    build:
-      context: .
-      dockerfile: ConcurrentResumeProcessor.WebUI/Dockerfile
-
-  concurrentresumeprocessor.tests:
-    image: concurrentresumeprocessor.tests
-    build:
-      context: .
-      dockerfile: ConcurrentResumeProcessor.Tests/Dockerfile
-
+      dockerfile: ProcessorWebUI/Dockerfile
+    ports:
+      - "5004:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ProcessorApiBaseUrl=http://processorapi:8080/
+    depends_on:
+      - processorapi

@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowBlazorWebUI", policy =>
-        policy.WithOrigins("http://localhost:5200")
+        policy.WithOrigins("http://localhost:5002")
             .AllowAnyMethod()
             .AllowAnyHeader());
 });

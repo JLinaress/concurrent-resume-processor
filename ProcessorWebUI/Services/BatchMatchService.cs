@@ -7,10 +7,9 @@ public class BatchMatchService : IBatchMatchService
 {
     private readonly HttpClient _client;
     
-    public BatchMatchService()
+    public BatchMatchService(IHttpClientFactory clientFactory)
     {
-        _client = new HttpClient();
-        _client.BaseAddress = new Uri("http://localhost:5000/");
+        _client = clientFactory.CreateClient("ProcessorApi");
     }
     
     public async Task<List<MatchResult>> MatchBatchAsync(BatchRequest request)

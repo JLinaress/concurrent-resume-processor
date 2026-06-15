@@ -1,9 +1,12 @@
-using System.Net;
 using ProcessorWebUI.Components;
 using ProcessorWebUI.Contracts;
 using ProcessorWebUI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHttpClient("ProcessorApi", client =>
+    client.BaseAddress = new Uri(
+        builder.Configuration["ProcessorApiBaseUrl"] ?? "http://localhost:5000/"));
 
 // Add scoped services for API communication
 builder.Services.AddScoped<IBatchMatchService, BatchMatchService>();
