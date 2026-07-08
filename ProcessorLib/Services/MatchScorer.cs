@@ -6,43 +6,34 @@ public class MatchScorer : IMatchScorer
 {
     public double CalculateMatchScore(IEnumerable<string>? resumeKeywords, IEnumerable<string>? jdKeywords)
     {
-        // Fix: Guard against null input right away to prevent NullReferenceException
         if (jdKeywords == null || resumeKeywords == null) return 0.0;
-
-        var comparer = StringComparer.OrdinalIgnoreCase;
-    
-        // Select(k => k.Trim()) removes leading/trailing spaces before hashing
-        var resumeFiltered = resumeKeywords
-            .Where(k => !string.IsNullOrWhiteSpace(k))
-            .Select(k => k.Trim())
-            .ToHashSet(comparer);
-
-        var jdFiltered = jdKeywords
-            .Where(k => !string.IsNullOrWhiteSpace(k))
-            .Select(k => k.Trim())
-            .ToHashSet(comparer);
         
+        var resumeFiltered = resumeKeywords.Where(k => !string.IsNullOrWhiteSpace(k)).Select(k => k.Trim()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var jdFiltered = jdKeywords.Where(k => !string.IsNullOrWhiteSpace(k)).Select(k => k.Trim()).ToHashSet(StringComparer.OrdinalIgnoreCase);
+    
         if (jdFiltered.Count == 0) return 0.0;
+        
+        var matched = resumeFiltered.Intersect(jdFiltered, StringComparer.OrdinalIgnoreCase).ToList();
+        var score = (double)matched.Count / jdFiltered.Count * 100.0;
     
-        // Count how many JD words are present in the resume
-        var intersectionCount = resumeFiltered.Intersect(jdFiltered, comparer).Count();
+        Console.WriteLine($"JD has {jdFiltered.Count} tech skills");
+        Console.WriteLine($"You have {matched.Count} of those skills");
+        Console.WriteLine($"You MATCH: {string.Join(", ", matched)}");
+        Console.WriteLine($"You MISSING: {string.Join(", ", jdFiltered.Except(resumeFiltered, StringComparer.OrdinalIgnoreCase))}");
+        Console.WriteLine($"SCORE: {Math.Round(score, 2)}%");
     
-        // Calculate coverage: (Matched Words / Total JD Words)
-        var coverage = (double)intersectionCount / jdFiltered.Count;
-    
-        return Math.Round(coverage * 100.0, 2);
+        return Math.Round(score, 2);
     }
 
     public List<string> FindMissingSkills(IEnumerable<string>? resumeKeywords, IEnumerable<string>? jdKeywords)
     {
         if (jdKeywords == null) return new List<string>();
-    
-        // If resume is null, all clean JD skills are missing
+        
         if (resumeKeywords == null) 
         {
             return jdKeywords
                 .Where(k => !string.IsNullOrWhiteSpace(k))
-                .Select(k => k.Trim().ToLower()) // Keeps your lowercase choice
+                .Select(k => k.Trim().ToLower())
                 .Take(20)
                 .ToList();
         }

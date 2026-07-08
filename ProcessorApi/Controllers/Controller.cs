@@ -18,9 +18,9 @@ public class BatchController : ControllerBase
     }
     
     [HttpPost("match")]
-    public async Task<ActionResult<List<MatchResult>>> MatchBatch([FromBody] BatchRequest request) =>
-        Ok(await _processor.ProcessBatchAsync(request.ResumeContent, request.JdContents, CancellationToken.None));
-
+    public  ActionResult<MatchResult> Match([FromBody] BatchRequest request) =>
+        Ok(_processor.ProcessAsync(request.ResumeContent, request.JdContent, CancellationToken.None));
+    
     [HttpPost("extract")]
     public ActionResult<List<string>> ExtractKeywords([FromBody] KeywordExtractionRequest request ) =>
         Ok( _extractor.ExtractKeywords(request.Text).ToList());

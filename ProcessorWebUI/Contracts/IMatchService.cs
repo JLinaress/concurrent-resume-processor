@@ -4,5 +4,5 @@ namespace ProcessorWebUI.Contracts;
 
 public interface IBatchMatchService
 {
-    Task<List<MatchResult>> MatchBatchAsync(BatchRequest request);
+    Task<MatchResult> MatchAsync(BatchRequest request);
 }

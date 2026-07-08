@@ -7,5 +7,6 @@ public class BatchRequest
     [StringLength(int.MaxValue)]
     public string ResumeContent { get; set; } = "";
     
-    public List<string> JdContents { get; set; } = new();
+    [StringLength(int.MaxValue)]
+    public string JdContent { get; set; } = "";
 }
