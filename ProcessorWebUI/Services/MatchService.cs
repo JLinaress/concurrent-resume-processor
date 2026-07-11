@@ -14,7 +14,7 @@ public class MatchService : IMatchService
     
     public async Task<MatchResult> MatchAsync(MatchRequest request)
     {
-        var response = await _client.PostAsJsonAsync("api/batch/match", request);
+        var response = await _client.PostAsJsonAsync("api/match", request);
         
         response.EnsureSuccessStatusCode();
         

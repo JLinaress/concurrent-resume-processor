@@ -5,7 +5,7 @@ using ProcessorLib.Models;
 namespace ProcessorApi.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api")]
 public class MatchController : ControllerBase
 {
     private readonly IMatchProcessorService _processor;
