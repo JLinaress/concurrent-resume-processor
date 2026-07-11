@@ -14,23 +14,28 @@ public class MatchProcessorService : IMatchProcessorService
         _scorer = scorer;
     }
 
-    public MatchResult ProcessAsync(string resumeText, string jdText, CancellationToken token)
+    public Task<MatchResult> ProcessAsync(string resumeText, string jdText, CancellationToken token)
     {
-        var resumeKeywords = _extractor.ExtractKeywords(resumeText);
-        var jdKeywords = _extractor.ExtractKeywords(jdText);
-        
-        var score = _scorer.CalculateMatchScore(resumeKeywords, jdKeywords);
-        var missing = _scorer.FindMissingSkills(resumeKeywords, jdKeywords);
-        var strongMatches = _scorer.FindStrongMatches(resumeKeywords, jdKeywords);
-        var tailored = GenerateTailoredResume(resumeText, strongMatches, missing);
-        
-        return new MatchResult
+        return Task.Run(() =>
         {
-            Score = score,
-            JdKeywords = jdKeywords.Take(20).ToList(),
-            MissingSkills = missing.Take(10).ToList(),
-            TailoredResumeMarkdown = tailored
-        };
+            token.ThrowIfCancellationRequested();
+
+            var resumeKeywords = _extractor.ExtractKeywords(resumeText);
+            var jdKeywords = _extractor.ExtractKeywords(jdText);
+
+            var score = _scorer.CalculateMatchScore(resumeKeywords, jdKeywords);
+            var missing = _scorer.FindMissingSkills(resumeKeywords, jdKeywords);
+            var strongMatches = _scorer.FindStrongMatches(resumeKeywords, jdKeywords);
+            var tailored = GenerateTailoredResume(resumeText, strongMatches, missing);
+
+            return new MatchResult
+            {
+                Score = score,
+                JdKeywords = jdKeywords.Take(20).ToList(),
+                MissingSkills = missing.Take(10).ToList(),
+                TailoredResumeMarkdown = tailored
+            };
+        }, token);
     }
     
     private static string GenerateTailoredResume(

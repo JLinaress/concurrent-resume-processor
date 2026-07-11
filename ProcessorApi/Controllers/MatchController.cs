@@ -18,8 +18,8 @@ public class MatchController : ControllerBase
     }
     
     [HttpPost("match")]
-    public  ActionResult<MatchResult> Match([FromBody] MatchRequest request) =>
-        Ok(_processor.ProcessAsync(request.ResumeContent, request.JdContent, CancellationToken.None));
+    public async Task<ActionResult<MatchResult>> Match([FromBody] MatchRequest request) =>
+        Ok( await _processor.ProcessAsync(request.ResumeContent, request.JdContent, CancellationToken.None));
     
     [HttpPost("extract")]
     public ActionResult<List<string>> ExtractKeywords([FromBody] KeywordExtractionRequest request ) =>
