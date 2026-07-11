@@ -8,7 +8,7 @@ namespace ProcessorTests.ProcessorLibTests;
 public class MatchProcessorServiceTests
 {
     [Fact]
-    public void BatchProcessorService_EmptyJdList_ReturnsEmptyResult()
+    public async Task MatchProcessorService_EmptyJdList_ReturnsEmptyResult()
     {
         // Arrange
         var mockExtractor = new Mock<IKeywordExtractor>();
@@ -26,8 +26,7 @@ public class MatchProcessorServiceTests
         var service = new MatchProcessorService(mockExtractor.Object, mockMatch.Object);
 
         // Act
-        var result =
-            service.ProcessAsync("sample resume content", "", CancellationToken.None);
+        var result = await service.ProcessAsync("sample resume content", "", CancellationToken.None);
 
         // Assert
         result.Score.Should().Be(0);
@@ -37,8 +36,9 @@ public class MatchProcessorServiceTests
     }
 
     [Fact]
-    public void BatchProcessorService_SingleJd_ReturnsMatchResult()
+    public async Task MatchProcessorService_SingleJd_ReturnsMatchResult()
     {
+        // Arrange
         var mockExtractor = new Mock<IKeywordExtractor>();
         mockExtractor.Setup(e => e.ExtractKeywords(It.IsAny<string>()))
             .Returns(new HashSet<string>());
@@ -55,8 +55,10 @@ public class MatchProcessorServiceTests
 
         var jd = "High Match JD Text";
 
-        var result = service.ProcessAsync("Resume content", jd, CancellationToken.None);
+        // Act
+        var result = await service.ProcessAsync("Resume content", jd, CancellationToken.None);
 
+        // Assert
         result.Score.Should().Be(85.0);
         result.JdKeywords.Should().BeEmpty();
         result.MissingSkills.Should().Equal("Skill1", "Skill2");
@@ -65,12 +67,13 @@ public class MatchProcessorServiceTests
     }
     
     [Fact]
-    public void BatchProcessorService_NullInputs_ReturnsZeroScoreAndEmptyLists()
+    public async Task MatchProcessorService_NullInputs_ReturnsZeroScoreAndEmptyLists()
     {
+        // Arrange
         var mockExtractor = new Mock<IKeywordExtractor>();
         mockExtractor.Setup(e => e.ExtractKeywords(It.IsAny<string>()))
             .Returns(new HashSet<string>());
-
+    
         var mockMatch = new Mock<IMatchScorer>();
         mockMatch.Setup(s => s.CalculateMatchScore(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
             .Returns(0.0);
@@ -78,11 +81,13 @@ public class MatchProcessorServiceTests
             .Returns(new List<string>());
         mockMatch.Setup(s => s.FindStrongMatches(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
             .Returns(new List<string>());
-
+    
         var service = new MatchProcessorService(mockExtractor.Object, mockMatch.Object);
-
-        var result = service.ProcessAsync("", "", CancellationToken.None);
-
+    
+        // Act
+        var result = await service.ProcessAsync("", "", CancellationToken.None);
+    
+        // Assert
         result.Score.Should().Be(0.0);
         result.JdKeywords.Should().BeEmpty();
         result.MissingSkills.Should().BeEmpty();
@@ -90,16 +95,26 @@ public class MatchProcessorServiceTests
     }
     
     [Fact]
-    public void BatchProcessorService_WhiteSpaceOnlyInputs_ReturnsZeroScoreAndEmptyLists()
+    public async Task MatchProcessorService_WhiteSpaceOnlyInputs_ReturnsZeroScoreAndEmptyLists()
     {
+        // Arrange
         var mockExtractor = new Mock<IKeywordExtractor>();
         mockExtractor.Setup(e => e.ExtractKeywords(It.IsAny<string>()))
             .Returns(new HashSet<string>());
         var mockMatch = new Mock<IMatchScorer>();
         mockMatch.Setup(s => s.CalculateMatchScore(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
             .Returns(0.0);
+        mockMatch.Setup(s => s.FindMissingSkills(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
+            .Returns(new List<string>());
+        mockMatch.Setup(s => s.FindStrongMatches(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
+            .Returns(new List<string>());
+        
         var service = new MatchProcessorService(mockExtractor.Object, mockMatch.Object);
-        var result = service.ProcessAsync("sample resume content", "", CancellationToken.None);
+        
+        // Act
+        var result = await service.ProcessAsync("sample resume content", null, CancellationToken.None);
+        
+        // Assert
         result.Score.Should().Be(0.0);
         result.JdKeywords.Should().BeEmpty();
         result.MissingSkills.Should().BeEmpty();
