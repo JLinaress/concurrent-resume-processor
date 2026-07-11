@@ -2,7 +2,7 @@
 @rendermode InteractiveServer
 @using ProcessorLib.Models
 @using ProcessorWebUI.Contracts
-@inject IBatchMatchService MatchService
+@inject IMatchService MatchService
 
 <PageTitle>Resume Match</PageTitle>
 
@@ -111,7 +111,7 @@
                     .Where(line => !string.IsNullOrWhiteSpace(line))
             ).Trim();
            
-            var request = new BatchRequest
+            var request = new MatchRequest
             {
                 ResumeContent = cleanResume,
                 JdContent = cleanJd

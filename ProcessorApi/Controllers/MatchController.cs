@@ -6,19 +6,19 @@ namespace ProcessorApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class BatchController : ControllerBase
+public class MatchController : ControllerBase
 {
-    private readonly IBatchProcessorService _processor;
+    private readonly IMatchProcessorService _processor;
     private readonly IKeywordExtractor _extractor;
     
-    public BatchController(IBatchProcessorService processor, IKeywordExtractor extractor)
+    public MatchController(IMatchProcessorService processor, IKeywordExtractor extractor)
     {
         _processor = processor;
         _extractor = extractor;
     }
     
     [HttpPost("match")]
-    public  ActionResult<MatchResult> Match([FromBody] BatchRequest request) =>
+    public  ActionResult<MatchResult> Match([FromBody] MatchRequest request) =>
         Ok(_processor.ProcessAsync(request.ResumeContent, request.JdContent, CancellationToken.None));
     
     [HttpPost("extract")]

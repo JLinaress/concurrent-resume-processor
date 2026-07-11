@@ -5,7 +5,7 @@ using ProcessorLib.Services;
 
 namespace ProcessorTests.ProcessorLibTests;
 
-public class BatchProcessorServiceTests
+public class MatchProcessorServiceTests
 {
     [Fact]
     public void BatchProcessorService_EmptyJdList_ReturnsEmptyResult()
@@ -23,7 +23,7 @@ public class BatchProcessorServiceTests
         mockMatch.Setup(m => m.FindStrongMatches(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
             .Returns(new List<string>());
         
-        var service = new BatchProcessorService(mockExtractor.Object, mockMatch.Object);
+        var service = new MatchProcessorService(mockExtractor.Object, mockMatch.Object);
 
         // Act
         var result =
@@ -51,7 +51,7 @@ public class BatchProcessorServiceTests
         mockMatch.Setup(s => s.FindStrongMatches(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
             .Returns(new List<string> { "C#", "ASP.NET" });
 
-        var service = new BatchProcessorService(mockExtractor.Object, mockMatch.Object);
+        var service = new MatchProcessorService(mockExtractor.Object, mockMatch.Object);
 
         var jd = "High Match JD Text";
 
@@ -79,7 +79,7 @@ public class BatchProcessorServiceTests
         mockMatch.Setup(s => s.FindStrongMatches(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
             .Returns(new List<string>());
 
-        var service = new BatchProcessorService(mockExtractor.Object, mockMatch.Object);
+        var service = new MatchProcessorService(mockExtractor.Object, mockMatch.Object);
 
         var result = service.ProcessAsync("", "", CancellationToken.None);
 
@@ -98,7 +98,7 @@ public class BatchProcessorServiceTests
         var mockMatch = new Mock<IMatchScorer>();
         mockMatch.Setup(s => s.CalculateMatchScore(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
             .Returns(0.0);
-        var service = new BatchProcessorService(mockExtractor.Object, mockMatch.Object);
+        var service = new MatchProcessorService(mockExtractor.Object, mockMatch.Object);
         var result = service.ProcessAsync("sample resume content", "", CancellationToken.None);
         result.Score.Should().Be(0.0);
         result.JdKeywords.Should().BeEmpty();

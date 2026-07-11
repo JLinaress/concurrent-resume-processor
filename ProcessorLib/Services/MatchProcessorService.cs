@@ -4,11 +4,11 @@ using ProcessorLib.Models;
 
 namespace ProcessorLib.Services;
 
-public class BatchProcessorService : IBatchProcessorService
+public class MatchProcessorService : IMatchProcessorService
 {
     private readonly IKeywordExtractor _extractor;
     private readonly IMatchScorer _scorer;
-    public BatchProcessorService(IKeywordExtractor extractor, IMatchScorer scorer)
+    public MatchProcessorService(IKeywordExtractor extractor, IMatchScorer scorer)
     {
         _extractor = extractor;
         _scorer = scorer;

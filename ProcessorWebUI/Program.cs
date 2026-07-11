@@ -9,7 +9,7 @@ builder.Services.AddHttpClient("ProcessorApi", client =>
         builder.Configuration["ProcessorApiBaseUrl"] ?? "http://localhost:5000/"));
 
 // Add scoped services for API communication
-builder.Services.AddScoped<IBatchMatchService, BatchMatchService>();
+builder.Services.AddScoped<IMatchService, MatchService>();
 
 // Add services to container.
 builder.Services.AddRazorComponents()

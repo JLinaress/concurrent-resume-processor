@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ProcessorLib.Models;
 
-public class BatchRequest
+public class MatchRequest
 {
     [StringLength(int.MaxValue)]
     public string ResumeContent { get; set; } = "";

@@ -2,7 +2,7 @@ using ProcessorLib.Models;
 
 namespace ProcessorWebUI.Contracts;
 
-public interface IBatchMatchService
+public interface IMatchService
 {
-    Task<MatchResult> MatchAsync(BatchRequest request);
+    Task<MatchResult> MatchAsync(MatchRequest request);
 }

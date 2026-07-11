@@ -3,16 +3,16 @@ using ProcessorWebUI.Contracts;
 
 namespace ProcessorWebUI.Services;
 
-public class BatchMatchService : IBatchMatchService
+public class MatchService : IMatchService
 {
     private readonly HttpClient _client;
     
-    public BatchMatchService(IHttpClientFactory clientFactory)
+    public MatchService(IHttpClientFactory clientFactory)
     {
         _client = clientFactory.CreateClient("ProcessorApi");
     }
     
-    public async Task<MatchResult> MatchAsync(BatchRequest request)
+    public async Task<MatchResult> MatchAsync(MatchRequest request)
     {
         var response = await _client.PostAsJsonAsync("api/batch/match", request);
         
