@@ -4,5 +4,5 @@ namespace ProcessorWebUI.Contracts;
 
 public interface IMatchService
 {
-    Task<MatchResult> MatchAsync(MatchRequest request);
+    Task<MatchResult> MatchAsync(MatchRequest request, CancellationToken token);
 }

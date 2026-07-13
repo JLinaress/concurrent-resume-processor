@@ -23,9 +23,14 @@ public class MatchProcessorService : IMatchProcessorService
             var resumeKeywords = _extractor.ExtractKeywords(resumeText);
             var jdKeywords = _extractor.ExtractKeywords(jdText);
 
+            token.ThrowIfCancellationRequested();
+            
             var score = _scorer.CalculateMatchScore(resumeKeywords, jdKeywords);
             var missing = _scorer.FindMissingSkills(resumeKeywords, jdKeywords);
             var strongMatches = _scorer.FindStrongMatches(resumeKeywords, jdKeywords);
+            
+            token.ThrowIfCancellationRequested();
+            
             var tailored = GenerateTailoredResume(resumeText, strongMatches, missing);
 
             return new MatchResult

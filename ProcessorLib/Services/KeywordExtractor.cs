@@ -14,7 +14,7 @@ public class KeywordExtractor : IKeywordExtractor
         "linux", "windows", "bash", "shell", "terraform", "ansible", "jenkins",
         "c++", "scala", "go", "rust", "ruby", "php", "kotlin", "html", 
         "css",  "ada", "fortran", "assembly", "xml", "asp", "access", "mongodb",
-        "rabbitmq", "full-stack", "unix", "solaris"
+        "rabbitmq", "full-stack", "unix", "solaris", "tcp/ip", "dotnet", "node.js", "f#"
     };
     
     public IEnumerable<string> ExtractKeywords(string text)
@@ -42,7 +42,7 @@ public class KeywordExtractor : IKeywordExtractor
     {
         token = token.Trim().ToLower();
 
-        if (token == ".net" || token == "dotnet") return ".net";
+        if (token == "dotnet" || token == ".net") return ".net";
         if (token == "csharp" || token == "c#") return "c#";
         if (token == "nodejs" || token == "node.js") return "node.js";
         if (token == "python" || token == "python") return "python";

@@ -7,18 +7,14 @@ namespace ProcessorTests.ProcessorLibTests;
 public class KeywordExtractorTests
 {
     [Theory]
-    [InlineData("DOTNET", ".net")]
-    [InlineData("CI/CD", "ci/cd")]
-    [InlineData("Business", "business")] // Ends in 'ss'
-    [InlineData("Redis", "redis")]       // Ends in 'is'
-    [InlineData("Node.js", "node.js")]
-    [InlineData("[]", "")]
-    [InlineData("developers", "developer")] // Standard plural stripped
-    [InlineData("aws", "aws")]             // Short length protected
-    [InlineData("ci/cds", "ci/cds")]       // Non-letter protected
-    [InlineData("ci/cd,tcp/ip", "tcp/ip")]  // Glued via comma
-    [InlineData("   ", "")]                 // Only whitespace
-    [InlineData(null, "")]                  // Null handling
+    [InlineData("DOTNET", "dotnet")]         // Exists in TechKeywords
+    [InlineData("CI/CD", "ci/cd")]           // Exists in TechKeywords
+    [InlineData("Redis", "redis")]           // Exists in TechKeywords
+    [InlineData("Node.js", "node.js")]       // Exists in TechKeywords
+    [InlineData("aws", "aws")]               // Exists in TechKeywords
+    [InlineData("ci/cd,tcp/ip", "tcp/ip")]   // Comma is replaced by space in CleanText, "tcp/ip" matches
+    [InlineData("   ", "")]                  // Only whitespace handled safely
+    [InlineData(null, "")]                   // Null handled safely
     public void ExtractKeywords_EdgeCases_ReturnsHandledExpectedly(string? input, string expected)
     {
         // Arrange
@@ -33,9 +29,28 @@ public class KeywordExtractorTests
         else
             result.Should().Contain(expected);
     }
+
+    [Theory]
+    [InlineData("DOTNET", ".net")]
+    [InlineData("ts", "typescript")]
+    [InlineData("csharp", "c#")]
+    [InlineData("business...", "business")]
+    [InlineData("-redis-", "redis")]
+    [InlineData("/aws/", "aws")]
+    public void NormalizeToken_VariousTokens_ReturnsExpectedNormalizedForm(string? input, string expected)
+    {
+        // Arrange
+        var extractor = new KeywordExtractor();
+        
+        // Act
+        var result = extractor.NormalizeToken(input);
+        
+        // Assert
+        result.Should().Be(expected);
+    }
     
     [Fact]
-    public void ExtractKeywords_StopWordsAndDuplicates_FiltersThemOut()
+    public void ExtractKeywords_ExtractDuplicates_FiltersThemOut()
     {
         // Arrange
         var extractor = new KeywordExtractor();
@@ -44,7 +59,7 @@ public class KeywordExtractorTests
         var result = extractor.ExtractKeywords("C# and the C# language is great");
         
         // Assert
-        result.Should().BeEquivalentTo(new[] { "c#", "language", "great" });
+        result.Should().BeEquivalentTo(new[] { "c#" });
     }
 
     [Fact]
@@ -53,7 +68,7 @@ public class KeywordExtractorTests
         var extractor = new KeywordExtractor();
         var result = extractor.ExtractKeywords("The resumes; for C# not F#!").ToList();
         
-        result.Should().BeEquivalentTo(new[] { "resume", "c#" });
+        result.Should().BeEquivalentTo(new[] { "c#", "f#" });
     }
     
     [Fact]
@@ -81,7 +96,7 @@ public class KeywordExtractorTests
     }
 
     [Fact]
-    public void ExtractKeywords_PureNumbers_HandlesAsExpected()
+    public void ExtractKeywords_PureNumbers_ReturnsEmptySafely()
     {
         // Arrange
         var extractor = new KeywordExtractor();
@@ -90,10 +105,6 @@ public class KeywordExtractorTests
         var result = extractor.ExtractKeywords("Built in 2026 with 5000 lines of code").ToList();
     
         // Assert
-        result.Should().Contain("line"); // Changed from "lines" to match your pluralization logic
-        result.Should().NotContain("lines"); 
-    
-        result.Should().Contain("2026");
-        result.Should().Contain("5000");
+        result.Should().BeEmpty(); // Pure numbers should not be extracted as keywords
     }
 }

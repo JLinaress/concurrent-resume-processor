@@ -140,21 +140,53 @@ public class MatchProcessorServiceTests
         // Arrange
         var mockExtractor = new Mock<IKeywordExtractor>();
         mockExtractor.Setup(e => e.ExtractKeywords(It.IsAny<string>()))
-            .Returns(Enumerable.Range(1, 30).Select(i => $"Keyword {i}"));
-        
+            .Returns(Enumerable.Range(1, 30).Select(i => $"Keyword {i}").ToList());
+    
         var mockMatch = new Mock<IMatchScorer>();
+        mockMatch.Setup(s => s.CalculateMatchScore(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
+            .Returns(100.0);
         mockMatch.Setup(s => s.FindMissingSkills(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()))
-            .Returns(Enumerable.Range(1, 15).Select(i => $"MissingSkill {i}").ToList());
+            .Returns(Enumerable.Range(1, 15).Select(i => $"MissingSkill{i}").ToList()); // 15 skills
         mockMatch.Setup(s => s.FindStrongMatches(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>())) 
-            .Returns(Enumerable.Range(1, 10).Select(i => $"StrongMatch {i}").ToList());
-        
+            .Returns(Enumerable.Range(1, 10).Select(i => $"StrongMatch{i}").ToList());  // 10 matches
+    
         var service = new MatchProcessorService(mockExtractor.Object, mockMatch.Object);
-        
+    
         // Act
         var result = await service.ProcessAsync("sample resume content", "jd", CancellationToken.None);
-        
+    
         // Assert
         result.JdKeywords.Should().HaveCount(20);
         result.MissingSkills.Should().HaveCount(10);
+
+        // NEW BOUNDARY CHECKS: Verifies that GenerateTailoredResume honors its Take(5) loops
+        result.TailoredResumeMarkdown.Should().Contain("StrongMatch5");
+        result.TailoredResumeMarkdown.Should().NotContain("StrongMatch6"); // Truncated!
+
+        result.TailoredResumeMarkdown.Should().Contain("MissingSkill5");
+        result.TailoredResumeMarkdown.Should().NotContain("MissingSkill6"); // Truncated!
+    }
+    
+    [Fact]
+    public async Task ProcessAsync_WhenCancellationTokenIsTriggered_AbortsImmediatelyAndThrowsException()
+    {
+        // Arrange
+        var mockExtractor = new Mock<IKeywordExtractor>();
+        var mockScorer = new Mock<IMatchScorer>();
+        var service = new MatchProcessorService(mockExtractor.Object, mockScorer.Object);
+
+        // Create a token and cancel it immediately before sending it to the service
+        using var cts = new CancellationTokenSource();
+        cts.Cancel();
+
+        // Act
+        Func<Task> act = async () => await service.ProcessAsync("Sample resume", "Sample JD", cts.Token);
+
+        // Assert: Ensure it cleanly throws the standard cancellation exception
+        await act.Should().ThrowAsync<OperationCanceledException>();
+
+        // Ensure the service stopped before it ever reached your heavy dependency methods
+        mockExtractor.Verify(e => e.ExtractKeywords(It.IsAny<string>()), Times.Never);
+        mockScorer.Verify(s => s.CalculateMatchScore(It.IsAny<IEnumerable<string>>(), It.IsAny<IEnumerable<string>>()), Times.Never);
     }
 }

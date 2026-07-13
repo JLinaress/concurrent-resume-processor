@@ -12,13 +12,13 @@ public class MatchService : IMatchService
         _client = clientFactory.CreateClient("ProcessorApi");
     }
     
-    public async Task<MatchResult> MatchAsync(MatchRequest request)
+    public async Task<MatchResult> MatchAsync(MatchRequest request,  CancellationToken token)
     {
-        var response = await _client.PostAsJsonAsync("api/match", request);
+        var response = await _client.PostAsJsonAsync("api/match", request, token);
         
         response.EnsureSuccessStatusCode();
         
-        return await response.Content.ReadFromJsonAsync<MatchResult>() 
+        return await response.Content.ReadFromJsonAsync<MatchResult>(cancellationToken: token) 
                ?? throw new InvalidOperationException("Failed to deserialize MatchResult");
     }
 }

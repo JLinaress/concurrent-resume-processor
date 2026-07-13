@@ -16,10 +16,24 @@ public class MatchController : ControllerBase
         _processor = processor;
         _extractor = extractor;
     }
-    
+
     [HttpPost("match")]
-    public async Task<ActionResult<MatchResult>> Match([FromBody] MatchRequest request) =>
-        Ok( await _processor.ProcessAsync(request.ResumeContent, request.JdContent, CancellationToken.None));
+    public async Task<ActionResult<MatchResult>> Match([FromBody] MatchRequest request)
+    {
+        try
+        {
+            var result = await _processor.ProcessAsync(
+                request.ResumeContent, 
+                request.JdContent, 
+                CancellationToken.None);
+            
+            return Ok(result);
+        }
+        catch (OperationCanceledException)
+        {
+            return StatusCode(499, "Request was canceled.");
+        }
+    }
     
     [HttpPost("extract")]
     public ActionResult<List<string>> ExtractKeywords([FromBody] KeywordExtractionRequest request ) =>
